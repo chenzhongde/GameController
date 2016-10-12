@@ -1,19 +1,5 @@
 package controller;
 
-import common.ApplicationLock;
-import common.Log;
-import controller.action.ActionBoard;
-import controller.net.GameControlReturnDataReceiver;
-import controller.net.SPLCoachMessageReceiver;
-import controller.net.Sender;
-import controller.ui.GUI;
-import controller.ui.KeyboardListener;
-import controller.ui.StartInput;
-import data.AdvancedData;
-import data.GameControlData;
-import data.Rules;
-import data.Teams;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -22,8 +8,25 @@ import java.net.NetworkInterface;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+
+import common.ApplicationLock;
+import common.Log;
+import controller.action.ActionBoard;
+import controller.net.GameControlReturnDataReceiver;
+import controller.net.SPLCoachMessageReceiver;
+import controller.net.Sender;
+import controller.ui.DropInAssignment;
+import controller.ui.GUI;
+import controller.ui.KeyboardListener;
+import controller.ui.StartInput;
+import data.AdvancedData;
+import data.GameControlData;
+import data.Rules;
+import data.Teams;
 
 /**
  * @author Michel Bartsch
@@ -55,7 +58,8 @@ public class GameController
     private static final String COMMAND_LEAGUE_SHORT = "-l";
     private static final String COMMAND_WINDOW = "--window";
     private static final String COMMAND_WINDOW_SHORT = "-w";
-
+    
+    
     /**
      * The program starts here.
      * 
@@ -65,7 +69,7 @@ public class GameController
     {
         // Do not just System.exit(0) on Macs when selecting GameController/Quit
         System.setProperty("apple.eawt.quitStrategy", "CLOSE_ALL_WINDOWS");
-
+        
         //commands
         String interfaceName = "";
         boolean windowMode = false;
@@ -240,10 +244,17 @@ public class GameController
 
         //ui
         ActionBoard.init();
-        Log.state(data, Teams.getNames(false)[data.team[0].teamNumber]
-                + " (" + Rules.league.teamColorName[data.team[0].teamColor]
-                + ") vs " + Teams.getNames(false)[data.team[1].teamNumber]
-                + " (" + Rules.league.teamColorName[data.team[1].teamColor] + ")");
+        if(data.gameType == GameControlData.GAME_DROPIN) {
+            Log.state(data, DropInAssignment.numberToTeam.get(11) + " " + DropInAssignment.numberToTeam.get(12) + " " + DropInAssignment.numberToTeam.get(13) + " " + DropInAssignment.numberToTeam.get(14) + " " + DropInAssignment.numberToTeam.get(15) 
+            		+ " (" + Rules.league.teamColorName[data.team[0].teamColor] + ")  vs "
+            		+ DropInAssignment.numberToTeam.get(21) + " " + DropInAssignment.numberToTeam.get(22) + " " + DropInAssignment.numberToTeam.get(23) + " " + DropInAssignment.numberToTeam.get(24) + " " + DropInAssignment.numberToTeam.get(25) 
+                    + " (" + Rules.league.teamColorName[data.team[1].teamColor] + ")");
+        } else {
+            Log.state(data, Teams.getNames(false)[data.team[0].teamNumber]
+                    + " (" + Rules.league.teamColorName[data.team[0].teamColor]
+                    + ") vs " + Teams.getNames(false)[data.team[1].teamNumber]
+                    + " (" + Rules.league.teamColorName[data.team[1].teamColor] + ")");
+        }
         GUI gui = new GUI(input.outFullscreen, data);
         new KeyboardListener();
         EventHandler.getInstance().setGUI(gui);

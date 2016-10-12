@@ -59,6 +59,7 @@ public class StartInput extends JFrame implements Serializable
     private static final String FULLSCREEN_LABEL = "Fullscreen";
     private static final String COLOR_CHANGE_LABEL = "Auto color change";
     private static final String START_LABEL = "Start";
+    private static final String ASSIGN_TO_TEAM_LABEL = "Assign robots to team";
     
     /** If true, this GUI has finished and offers it`s input. */
     public boolean finished = false;
@@ -69,6 +70,7 @@ public class StartInput extends JFrame implements Serializable
     public boolean outFulltime;
     public boolean outFullscreen;
     public boolean outAutoColorChange;
+    public boolean outDropInAssignment;
 
     /** All the components of this GUI. */
     private ImagePanel[] teamContainer = new ImagePanel[2];
@@ -85,6 +87,7 @@ public class StartInput extends JFrame implements Serializable
     private Checkbox fullscreen;
     private Checkbox autoColorChange;
     private JButton start;
+    private Checkbox dropInAssignment;
     
     private HashMap<String, Image> images = new HashMap<String, Image>();
 
@@ -179,6 +182,11 @@ public class StartInput extends JFrame implements Serializable
         autoColorChangePanel.add(autoColorChange);
         autoColorChange.setState(Rules.league.colorChangeAuto);
 
+        dropInAssignment = new Checkbox(ASSIGN_TO_TEAM_LABEL);
+        dropInAssignment.setPreferredSize(new Dimension(FULLSCREEN_WIDTH, OPTIONS_HEIGHT));
+        autoColorChangePanel.add(dropInAssignment);
+        dropInAssignment.setVisible(false);
+        
         optionsRight = new JPanel();
         optionsRight.setPreferredSize(new Dimension(WINDOW_WIDTH/2-2*STANDARD_SPACE, OPTIONS_CONTAINER_HEIGHT));
         add(optionsRight);
@@ -208,9 +216,11 @@ public class StartInput extends JFrame implements Serializable
                         nofulltime.setVisible(false);
                         fulltime.setVisible(false);
                         autoColorChange.setVisible(false);
+                        dropInAssignment.setVisible(true);
                     } else {
                         nofulltime.setVisible(true);
                         fulltime.setVisible(true);
+                        dropInAssignment.setVisible(false);
                         if (Rules.league instanceof SPL) {
                             nofulltime.setText(FULLTIME_LABEL_NO);
                             fulltime.setText(FULLTIME_LABEL_YES);
@@ -257,7 +267,15 @@ public class StartInput extends JFrame implements Serializable
                     outFulltime = fulltime.isSelected() && fulltime.isVisible();
                     outFullscreen = fullscreen.getState();
                     outAutoColorChange = autoColorChange.getState();
-                    finished = true;
+                    outDropInAssignment = dropInAssignment.getState();
+                    if(outDropInAssignment) {
+                    	DropInAssignment assign = new DropInAssignment();
+                    	if(assign.ready) {
+                    		finished = true;
+                    	}
+                    } else {
+                    	finished = true;
+                    }
                 }});
                 
         league.getActionListeners()[league.getActionListeners().length - 1].actionPerformed(null);

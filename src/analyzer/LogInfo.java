@@ -40,6 +40,8 @@ public class LogInfo
     public boolean keepColors = false;
     /* The teams's names. */
     public String[] team = new String[2];
+    /* The team names in case of dropin*/
+    public String [] dropinTeam = new String[10];
     /* The teams's jersey colors. */
     public String[] color = new String[2];
     /* Time of the first ready. */

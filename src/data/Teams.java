@@ -173,6 +173,26 @@ public class Teams
     }
     
     /**
+     * Returns an array containing the names of all teams in SPL.
+     * @param withNumbers If true, each name starts with "<teamNumber>: ".
+     * @return An array containing the names at their teamNumber's position.
+     */
+    public static String[] getNamesSPL(boolean withNumbers)
+    {
+        int leagueIndex = 0;
+        if (instance.teams[leagueIndex][0] == null) {
+            readTeams();
+        }
+        String[] out = new String[instance.teams[leagueIndex].length];
+        for (int i=0; i<instance.teams[leagueIndex].length; i++) {
+            if (instance.teams[leagueIndex][i] != null) {
+                out[i] = instance.teams[leagueIndex][i].name + (withNumbers ? " (" + i + ")" : "");
+            }
+        }
+        return out;
+    }
+    
+    /**
      * Loads a team's icon.
      * You don't need to use this because the getIcon method automatically
      * uses this if needed.

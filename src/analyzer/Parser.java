@@ -165,12 +165,26 @@ public class Parser
         String team;
         String player;
         String[] teams = new String[2];
-        if (log.team.length >= 2) {
-            teams[0] = log.team[0];
-            teams[1] = log.team[1];
+        String[] dropInTeams = new String[10];
+        if(log.league.equals(Rules.LEAGUES[1]) ){
+        	dropInTeams[0] = log.dropinTeam[0];
+        	dropInTeams[1] = log.dropinTeam[1];
+        	dropInTeams[2] = log.dropinTeam[2];
+        	dropInTeams[3] = log.dropinTeam[3];
+        	dropInTeams[4] = log.dropinTeam[4];
+        	dropInTeams[5] = log.dropinTeam[5];
+        	dropInTeams[6] = log.dropinTeam[6];
+        	dropInTeams[7] = log.dropinTeam[7];
+        	dropInTeams[8] = log.dropinTeam[8];
+        	dropInTeams[9] = log.dropinTeam[9];
         } else {
-            teams[0] = "unknown";
-            teams[1] = "unknown";
+            if (log.team.length >= 2) {
+                teams[0] = log.team[0];
+                teams[1] = log.team[1];
+            } else {
+                teams[0] = "unknown";
+                teams[1] = "unknown";
+            }
         }
         int i=0;
         for (String line : log.lines) {
